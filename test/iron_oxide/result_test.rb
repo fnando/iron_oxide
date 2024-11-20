@@ -159,4 +159,19 @@ class ResultTest < Minitest::Test
       Ok(1).flatten
     end
   end
+
+  test "works with pattern matching (deconstruct)" do
+    Ok(1) => Ok(result)
+
+    assert_equal 1, result
+  end
+
+  test "works with pattern matching (deconstruct_keys)" do
+    result = case Ok(1)
+             in value: Integer => value
+               value
+             end
+
+    assert_equal 1, result
+  end
 end

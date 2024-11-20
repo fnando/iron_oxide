@@ -5,6 +5,15 @@ module IronOxide
     class Base
       attr_reader :value
 
+      # Deconstructs the instance into an array.
+      def deconstruct
+        [value]
+      end
+
+      def deconstruct_keys(*)
+        {value:}
+      end
+
       # Checks if the instance represents a `Some` value.
       def some?
         instance_of?(SomeClass)

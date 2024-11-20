@@ -173,4 +173,19 @@ class OptionTest < Minitest::Test
       Some(1).flatten
     end
   end
+
+  test "works with pattern matching (deconstruct)" do
+    Some(1) => Some(result)
+
+    assert_equal 1, result
+  end
+
+  test "works with pattern matching (deconstruct_keys)" do
+    result = case Some(1)
+             in value: Integer => value
+               value
+             end
+
+    assert_equal 1, result
+  end
 end

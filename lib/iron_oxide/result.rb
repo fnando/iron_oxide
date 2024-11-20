@@ -9,6 +9,18 @@ module IronOxide
         @value = value
       end
 
+      # Deconstructs the instance into an array, so it can be using on
+      # pattern matching.
+      def deconstruct
+        [value]
+      end
+
+      # Deconstructs the instance into a hash, so it can be using on
+      # pattern matching.
+      def deconstruct_keys(*)
+        {value:}
+      end
+
       # Compares the current result with another result.
       def ==(other)
         Result.result?(other) &&
