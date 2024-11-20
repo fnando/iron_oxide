@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## 0.0.3
+
+[Fixed] Constant override warning.
+
 ## 0.0.2
 
 - [Added] Pattern matching support.
