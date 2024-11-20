@@ -3,15 +3,13 @@
 module IronOxide
   module Aliases
     Some = Option::SomeClass
-    None = Option::NoneClass
     Ok = Result::OkClass
     Err = Result::ErrClass
+    None = Option::None
 
     def Some(value) # rubocop:disable Naming/MethodName
       Option::Some(value)
     end
-
-    None = Option::None
 
     def Ok(value) # rubocop:disable Naming/MethodName
       Result::Ok(value)
