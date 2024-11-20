@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## 0.0.2
+
+- [Added] Pattern matching support.
+
 ## 0.0.1
 
 - Initial release.
