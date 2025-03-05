@@ -35,14 +35,14 @@ class OptionTest < Minitest::Test
 
   test "#expect" do
     assert_equal 1, Some(1).expect("fail")
-    assert_raises(IronOxide::ExpectError, "fail") { None.expect("fail") }
+    error = assert_raises(IronOxide::ExpectError) { None.expect("fail") }
+    assert_equal "fail", error.message
   end
 
   test "#unwrap" do
     assert_equal 1, Some(1).unwrap
-    assert_raises(IronOxide::ExpectError, "error unwrapping None") do
-      None.unwrap
-    end
+    error = assert_raises(IronOxide::ExpectError) { None.unwrap }
+    assert_equal "error unwrapping None", error.message
   end
 
   test "#unwrap_or" do
@@ -85,10 +85,9 @@ class OptionTest < Minitest::Test
   test "#and_then" do
     assert_equal Some(2), (Some(1).and_then { Some(_1 * 2) })
     assert_equal None, (None.and_then { Some(_1 * 2) })
-    assert_raises(TypeError,
-                  "expected block to return an Option; got Integer") do
-      Some(1).and_then { _1 * 2 }
-    end
+    error = assert_raises(TypeError) { Some(1).and_then { _1 * 2 } }
+    assert_equal "expected block to return an Option; got Integer",
+                 error.message
   end
 
   test "#filter" do
@@ -136,14 +135,11 @@ class OptionTest < Minitest::Test
     assert_equal [Some(1), Some("hi")], x.unzip
     assert_equal None, y.unzip
 
-    assert_raises ArgumentError, "expected value to respond to #to_a" do
-      Some(1).unzip
-    end
+    error = assert_raises(ArgumentError) { Some(1).unzip }
+    assert_equal "expected value to respond to #to_a", error.message
 
-    assert_raises ArgumentError,
-                  "expected value to have exactly 2 items; got 3" do
-      Some([1, 2, 3]).unzip
-    end
+    error = assert_raises(ArgumentError) { Some([1, 2, 3]).unzip }
+    assert_equal "expected value to have exactly 2 items; got 3", error.message
   end
 
   test "#transpose" do
@@ -155,9 +151,8 @@ class OptionTest < Minitest::Test
     assert_equal Ok(None), y.transpose
     assert_equal Err("oh noes!"), z.transpose
 
-    assert_raises TypeError, "expected value to be a Result; got Integer" do
-      Some(1).transpose
-    end
+    error = assert_raises(TypeError) { Some(1).transpose }
+    assert_equal "expected value to be a Result; got Integer", error.message
   end
 
   test "#flatten" do
@@ -169,9 +164,8 @@ class OptionTest < Minitest::Test
     assert_equal None, y.flatten
     assert_equal None, z.flatten
 
-    assert_raises TypeError, "expected value to be an Option; got Integer" do
-      Some(1).flatten
-    end
+    error = assert_raises(TypeError) { Some(1).flatten }
+    assert_equal "expected value to be an Option; got Integer", error.message
   end
 
   test "works with pattern matching (deconstruct)" do

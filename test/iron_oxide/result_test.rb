@@ -5,7 +5,7 @@ require "test_helper"
 class ResultTest < Minitest::Test
   include IronOxide::Aliases
 
-  test "#ok?" do
+  test "#ok? predicate" do
     assert Ok(1).ok?
     refute Err("nope").ok?
   end
@@ -16,7 +16,7 @@ class ResultTest < Minitest::Test
     refute(Err("nope").ok_and? { true })
   end
 
-  test "#err?" do
+  test "#err? predicate" do
     assert Err("nope").err?
     refute Ok(1).err?
   end
@@ -56,16 +56,15 @@ class ResultTest < Minitest::Test
 
   test "#expect" do
     assert_equal 2, Ok(2).expect("nope")
-    assert_raises(IronOxide::ExpectError, "some error") do
-      Err("nope").expect("some error")
-    end
+    error =
+      assert_raises(IronOxide::ExpectError) { Err("nope").expect("some error") }
+    assert_equal "some error", error.message
   end
 
   test "#unwrap" do
     assert_equal 1, Ok(1).unwrap
-    assert_raises(IronOxide::ExpectError, "error unwrapping Err") do
-      Err("nope").unwrap
-    end
+    error = assert_raises(IronOxide::ExpectError) { Err("nope").unwrap }
+    assert_equal "error unwrapping Err", error.message
   end
 
   test "#unwrap_or" do
@@ -88,10 +87,8 @@ class ResultTest < Minitest::Test
 
   test "#unwrap_err" do
     assert_equal "nope", Err("nope").unwrap_err
-    assert_raises(IronOxide::ExpectError,
-                  "expected value to be Err; got Ok<1>") do
-      Ok(1).unwrap_err
-    end
+    error = assert_raises(IronOxide::ExpectError) { Ok(1).unwrap_err }
+    assert_equal "expected Err; got Ok<1>", error.message
   end
 
   test "#and" do
@@ -105,9 +102,8 @@ class ResultTest < Minitest::Test
     assert_equal z, z.and(x)
     assert_equal z, e.and(z)
 
-    assert_raises TypeError, "expected Result; got String" do
-      y.and("wrong type")
-    end
+    error = assert_raises(TypeError) { y.and("wrong type") }
+    assert_equal "expected Result; got String", error.message
   end
 
   test "#and_then" do
@@ -129,35 +125,31 @@ class ResultTest < Minitest::Test
     assert_equal x, z.or(x)
     assert_equal z, z.or(e)
 
-    assert_raises TypeError, "expected Result; got String" do
-      y.or("wrong type")
-    end
+    error = assert_raises(TypeError) { y.or("wrong type") }
+    assert_equal "expected Result; got String", error.message
   end
 
   test "#or_else" do
     assert_equal(Ok(1), Ok(1).or_else { Ok(2) })
     assert_equal(Err("NOPE"), Err("nope").or_else { Err(_1.upcase) })
-    assert_raises(TypeError, "expected Result; got String") do
-      Err("nope").or_else(&:upcase)
-    end
+    error = assert_raises(TypeError) { Err("nope").or_else(&:upcase) }
+    assert_equal "expected Result; got String", error.message
   end
 
   test "#transpose" do
     assert_equal Some(Ok(1)), Ok(Some(1)).transpose
     assert_equal None, Ok(None).transpose
     assert_equal Some(Err("nope")), Err("nope").transpose
-    assert_raises TypeError, "expected value to be Option; got String" do
-      Ok(1).transpose
-    end
+    error = assert_raises(TypeError) { Ok(1).transpose }
+    assert_equal "expected value to be Option; got Integer", error.message
   end
 
   test "#flatten" do
     assert_equal Ok(1), Ok(Ok(1)).flatten
     assert_equal Err("nope"), Ok(Err("nope")).flatten
     assert_equal Err("nope"), Err("nope").flatten
-    assert_raises TypeError, "expected value to be a Result; got Integer" do
-      Ok(1).flatten
-    end
+    error = assert_raises(TypeError) { Ok(1).flatten }
+    assert_equal "expected value to be Result; got Integer", error.message
   end
 
   test "works with pattern matching (deconstruct)" do
