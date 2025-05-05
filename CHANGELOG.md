@@ -11,7 +11,7 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## 0.0.4
 
 [Changed] Make `Ok`/`Err`'s value optional.
 
