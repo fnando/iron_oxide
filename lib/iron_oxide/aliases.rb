@@ -11,11 +11,11 @@ module IronOxide
       Option::Some(value)
     end
 
-    def Ok(value) # rubocop:disable Naming/MethodName
+    def Ok(value = nil) # rubocop:disable Naming/MethodName
       Result::Ok(value)
     end
 
-    def Err(error) # rubocop:disable Naming/MethodName
+    def Err(error = nil) # rubocop:disable Naming/MethodName
       Result::Err(error)
     end
   end

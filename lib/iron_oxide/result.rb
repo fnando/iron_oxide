@@ -12,7 +12,7 @@ module IronOxide
       # Deconstructs the instance into an array, so it can be using on
       # pattern matching.
       def deconstruct
-        [value]
+        [value].compact
       end
 
       # Deconstructs the instance into a hash, so it can be using on

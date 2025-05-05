@@ -166,4 +166,20 @@ class ResultTest < Minitest::Test
 
     assert_equal 1, result
   end
+
+  test "works with pattern matching (no value provided)" do
+    result = case Ok()
+             in Ok()
+               true
+             end
+
+    assert result
+
+    result = case Err()
+             in Err()
+               true
+             end
+
+    assert result
+  end
 end
